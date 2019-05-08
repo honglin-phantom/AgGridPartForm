@@ -1,0 +1,44 @@
+<div class="container" fxLayout="column" fxLayoutAlign="start center">
+    <mat-form-field class="dealership-field">
+        <!-- (): event bind -->
+        <!-- []: value bind -->
+        <!-- [(value)]: bind to the selected branch and triggered event when value switched -->
+        <mat-select placeholder="Branch" (selectionChange)="updateForm()" [(value)]="selectedBranch">
+            <!-- drop down menu with branch as value displayed, without value bind the option tag will be gone -->
+            <!-- render option selected to replace select tag data -->
+            <mat-option *ngFor="let branch of branchNames" [value]="branch">
+                <!-- render branch name in drop down menu -->
+                {{ branch }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <form class="dealership-form"
+           fxLayout="column" fxLayoutAlign="start center"
+           (ngSubmit)="onSubmit()" [formGroup]="gridForm">
+        <mat-form-field class="dealership-field">
+            <input matInput formControlName="salesperson" placeholder="Lead Salesperson">
+        </mat-form-field>
+        <mat-form-field class="dealership-field">
+            <input matInput formControlName="telephone" placeholder="Branch Telephone" type="tel">
+        </mat-form-field>
+        <mat-form-field class="dealership-field">
+            <textarea matInput formControlName="address" row="4" placeholder="Branch Address">
+            </textarea>
+        </mat-form-field>
+        <ag-grid-angular style="width: 700px; height: 300px;"
+                         class="ag-theme-material"
+                         [rowData]="rowData"
+                         [columnDefs]="columnDefs"
+                         [frameworkComponents]="FormCellComponent"
+                         [context]="getContext()"
+                         (rowDataChanged)="refreshFormControls()"
+                         (gridReady)="gridReady($event)"
+        >
+        </ag-grid-angular>
+        <button style="margin-top: 10px; float: right;"
+                mat-raised-button [disabled]="!gridForm.valid"
+                type="submit">submit
+         </button>
+    </form>
+</div>
